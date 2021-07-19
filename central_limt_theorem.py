@@ -142,4 +142,4 @@ def main(plot=True):
 
 
 if __name__ == "__main__":
-    main(plot=False)
+    main(plot=True)
