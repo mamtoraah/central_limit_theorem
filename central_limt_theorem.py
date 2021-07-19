@@ -2,6 +2,7 @@
 import random
 from typing import List
 import matplotlib.pyplot as plt
+import matplotlib
 import statistics
 
 
@@ -21,8 +22,10 @@ def create_population(sample_size: int) -> List[int]:
     return population
 
 
-def generate_sample_mean_list(population: List[int], sample_size: int, sample_count: int) -> List[int]:
-    """From the population generate samples of size: sample_size and sample_count number of times
+def generate_sample_mean_list(population: List[int],
+                              sample_size: int,
+                              sample_count: int) -> List[int]:
+    """From the population generate samples of sample_size, sample_count times
 
     Args:
         population (List[int]): List of random numbers
@@ -40,13 +43,36 @@ def generate_sample_mean_list(population: List[int], sample_size: int, sample_co
     return sample_mean_list
 
 
-def plot_hist(population, ax):
-    plt.hist(population, 100)
-    plt.xlabel("Value")
-    plt.ylabel("Frequency")
-    plt.title("Histogram of Population of Random Numbers")
-    plt.text(0.8, 0.8, f"population_size={len(population)}", horizontalalignment='center',
-             verticalalignment='center', transform=ax.transAxes)
+def plot_hist(data: List[int],
+              ax: matplotlib.axes.Axes,
+              xlabel: str,
+              ylabel: str,
+              title: str,
+              texts: List[str]) -> None:
+    """Plot a histogram with labels and additional texts
+
+    Args:
+        data (List[int]): the list of data points to be plotted
+        ax (matplotlib.axes.Axes): Axes object for text plotting
+        xlabel (str): label on x axis
+        ylabel (str): label on y axis
+        title (str): title of the plot
+        texts (List[str]): Additional texts to be plotted
+    """
+    plt.hist(data, 100)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+
+    i = 0.0
+    for text in texts:
+        plt.text(0.8,
+                 0.8 - i,
+                 text,
+                 horizontalalignment='center',
+                 verticalalignment='center',
+                 transform=ax.transAxes)
+        i += 0.05
     plt.grid(True)
     plt.show()
 
@@ -56,15 +82,12 @@ def main():
     fig, ax = plt.subplots()
     population_size = int(1E5)
     population = create_population(population_size)
-    plot_hist(population, ax)
-    plt.hist(population, 100)
-    plt.xlabel("Value")
-    plt.ylabel("Frequency")
-    plt.title("Histogram of Population of Random Numbers")
-    plt.text(0.8, 0.8, f"population_size={population_size}", horizontalalignment='center',
-             verticalalignment='center', transform=ax.transAxes)
-    plt.grid(True)
-    plt.show()
+    plot_hist(population,
+              ax,
+              "Value",
+              "Frequency",
+              "Histogram of Population of Random Numbers",
+              [f"population_size={population_size}"])
 
     sample_size_list = [10, 20]
     sample_count_list = [1000, 5000]
@@ -75,25 +98,21 @@ def main():
                 population, sample_size, sample_count)
 
             # also called as mean of sample distribution of sample means
-            mean_of_sample_means = statistics.mean(sample_mean_list)
+            mean_of_sample_means = round(statistics.mean(sample_mean_list), 2)
 
-            # also called standard deviation of sample distribution of sample means
-            std_error = statistics.stdev(sample_mean_list)
+            # also called standard dev of sample distribution of sample means
+            std_error = round(statistics.stdev(sample_mean_list), 2)
 
-            plt.hist(sample_mean_list, 100)
-            plt.xlabel("Mean Value")
-            plt.ylabel("Frequency")
-            plt.title("Histogram of Sample Means")
-            plt.text(0.8, 0.9, f"sample_count={sample_count}", horizontalalignment='center',
-                     verticalalignment='center', transform=ax.transAxes)
-            plt.text(0.8, 0.85, f"sample_size={sample_size}", horizontalalignment='center',
-                     verticalalignment='center', transform=ax.transAxes)
-            plt.text(0.8, 0.8, f"mean_of_sample_means={mean_of_sample_means}", horizontalalignment='center',
-                     verticalalignment='center', transform=ax.transAxes)
-            plt.text(0.8, 0.75, f"std_error={std_error}", horizontalalignment='center',
-                     verticalalignment='center', transform=ax.transAxes)
-            plt.grid(True)
-            plt.show()
+            plot_hist(sample_mean_list,
+                      ax,
+                      "Mean Value",
+                      "Frequency",
+                      "Sampling Distribution of Sample Means",
+                      [
+                          f"sample_count={sample_count}",
+                          f"sample_size={sample_size}",
+                          f"mean_of_sample_means={mean_of_sample_means}",
+                          f"std_error={std_error}"])
 
 
 if __name__ == "__main__":
