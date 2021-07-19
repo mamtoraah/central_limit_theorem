@@ -15,3 +15,5 @@ python central_limit_theorem.py
 To try out different values of sample size modify the `sample_size_list`.
 
 To try out different values of sample count modify the `sample_count_list`.
+
+`plots/` directory contains a few sample plots showing the central limit theorem.
