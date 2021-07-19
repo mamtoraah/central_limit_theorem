@@ -139,6 +139,7 @@ def main(plot=True):
 
     df = pd.DataFrame(records)
     print(df)
+    df.to_csv("output.csv", index=False)
 
 
 if __name__ == "__main__":
